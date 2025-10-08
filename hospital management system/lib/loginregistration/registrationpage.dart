@@ -47,201 +47,263 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
 
-              children: [
-                TextField(
-                  controller: name,
-                  decoration: InputDecoration(
-                    labelText: "Full Name",
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
+
+
+
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF00C6FF), Color(0xFF0072FF)], // fresh blue gradient
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // 🌟 Animated Logo
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.8, end: 1.0),
+                    duration: const Duration(seconds: 2),
+                    curve: Curves.easeInOut,
+                    builder: (context, scale, child) {
+                      return Transform.scale(
+                        scale: scale,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.local_hospital,
+                            size: 50,
+                            color: Color(0xFF00ACC1), // cyan accent
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-
-                SizedBox(height: 20.0),
-
-                TextField(
-                  controller: email,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.alternate_email),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Trust, Hope & Healing — Your Health Our Priority",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white),
                   ),
-                ),
+                  const SizedBox(height: 30),
 
-                SizedBox(height: 20.0),
+                  // 🌈 Name Field
+                  _buildAnimatedField(
+                      controller: name,
+                      label: "Full Name",
+                      icon: Icons.person,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent),
+                  const SizedBox(height: 20),
 
-                TextField(
-                  obscureText: _obscurePassword,
-                  controller: password,
-                  decoration: InputDecoration(
-                    labelText: 'Password ',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
+                  // 🌈 Email Field
+                  _buildAnimatedField(
+                      controller: email,
+                      label: "Email",
+                      icon: Icons.alternate_email,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent),
+                  const SizedBox(height: 20),
 
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
+                  // 🌈 Password Field
+                  _buildAnimatedField(
+                      controller: password,
+                      label: "Password",
+                      icon: Icons.lock,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent,
+                      obscureText: _obscurePassword,
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscurePassword
                             ? Icons.visibility_off
-                            : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
-                TextField(
-                  controller: confirmPassword,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password ',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                  obscureText: true,
-                ),
-
-                SizedBox(height: 20),
-                TextField(
-                  controller: cell,
-                  decoration: InputDecoration(
-                    labelText: 'Cell Number',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.phone),
-                  ),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: address,
-                  decoration: InputDecoration(
-                    labelText: 'Address',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.maps_home_work_rounded),
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                DateTimeFormField(
-                  decoration: const InputDecoration(labelText: 'Date of Birth'),
-
-                  mode: DateTimeFieldPickerMode.date,
-                  pickerPlatform: dob,
-
-                  onChanged: (DateTime? value) {
-                    setState(() {
-                      selectedDOB = value;
-                    });
-                  },
-                ),
-
-                SizedBox(height: 20),
-
-                // Gender Selection
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Gender:",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      v2.RadioGroup(
-                        controller: genderController,
-                        values: const ["Male", "Female", "Other"],
-                        indexOfDefault: 2,
-                        orientation: RadioGroupOrientation.horizontal,
-                        onChanged: (newValue) {
+                            : Icons.visibility, color: Colors.white),
+                        onPressed: () {
                           setState(() {
-                            selectedGender = newValue.toString();
+                            _obscurePassword = !_obscurePassword;
                           });
                         },
+                      )),
+                  const SizedBox(height: 20),
+
+                  // 🌈 Confirm Password Field
+                  _buildAnimatedField(
+                      controller: confirmPassword,
+                      label: "Confirm Password",
+                      icon: Icons.lock,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent,
+                      obscureText: true),
+                  const SizedBox(height: 20),
+
+                  // 🌈 Cell
+                  _buildAnimatedField(
+                      controller: cell,
+                      label: "Cell Number",
+                      icon: Icons.phone,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent),
+                  const SizedBox(height: 20),
+
+                  // 🌈 Address
+                  _buildAnimatedField(
+                      controller: address,
+                      label: "Address",
+                      icon: Icons.maps_home_work_rounded,
+                      context: context,
+                      fillColor: Colors.white.withOpacity(0.2),
+                      iconColor: Colors.orangeAccent),
+                  const SizedBox(height: 20),
+
+                  // 🌈 Date of Birth
+                  DateTimeFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Date of Birth',
+                      prefixIcon: Icon(Icons.cake, color: Colors.orangeAccent),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white70),
                       ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 20.0),
-
-                TextButton.icon(
-                  icon: Icon(Icons.image),
-                  label: Text('Upload Image'),
-                  onPressed: pickImage,
-                ),
-                // Display selected image preview
-                if (kIsWeb && webImage != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.memory(
-                      webImage!,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.2),
                     ),
-                  )
-                else if (!kIsWeb && selectedImage != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.file(
-                      File(selectedImage!.path),
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
+                    mode: DateTimeFieldPickerMode.date,
+                    pickerPlatform: dob,
+                    onChanged: (DateTime? value) {
+                      setState(() {
+                        selectedDOB = value;
+                      });
+                    },
+                    style: TextStyle(color: Colors.white),
                   ),
+                  const SizedBox(height: 20),
 
-                SizedBox(height: 20.0),
-
-                ElevatedButton(
-                  onPressed: () {
-                    _register();
-                  },
-                  child: Text(
-                    "Registration",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontFamily: GoogleFonts.lato().fontFamily,
+                  // 🌈 Gender Selection
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Gender:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        v2.RadioGroup(
+                          controller: genderController,
+                          values: const ["Male", "Female", "Other"],
+                          indexOfDefault: 2,
+                          orientation: RadioGroupOrientation.horizontal,
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedGender = newValue.toString();
+                            });
+                          }
+                        ),
+                      ],
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 20.0),
+                  const SizedBox(height: 20),
 
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                  // 🌈 Upload Image
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.image),
+                    label: Text('Upload Image'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.cyanAccent.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: pickImage,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 🌟 Image Preview
+                  if (kIsWeb && webImage != null)
+                    Image.memory(webImage!, height: 100, width: 100, fit: BoxFit.cover)
+                  else if (!kIsWeb && selectedImage != null)
+                    Image.file(File(selectedImage!.path),
+                        height: 100, width: 100, fit: BoxFit.cover),
+
+                  const SizedBox(height: 30),
+
+                  // 🌟 Registration Button
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.cyanAccent.shade400, Colors.cyanAccent.shade700]),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, 4))
+                        ],
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: _register,
+                        child: Text(
+                          "Registration",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+
+                  // 🌈 Login redirect
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
+                    child: Text(
+                      'Already have an account? Login',
+                      style: TextStyle(
+                          color: Colors.white,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
+
+
+
+
+
+
+
     );
   }
 
@@ -359,4 +421,56 @@ class _RegistrationState extends State<Registration> {
       } else {}
     }
   }
+}
+
+//======End class of Registration ============
+
+
+
+
+
+
+
+
+
+
+// ---------------- Helper Method ----------------
+Widget _buildAnimatedField({
+  required TextEditingController controller,
+  required String label,
+  required IconData icon,
+  bool obscureText = false,
+  Widget? suffixIcon,
+  required BuildContext context,
+  Color fillColor = Colors.white24,
+  Color iconColor = Colors.white,
+}) {
+  return TweenAnimationBuilder<double>(
+    tween: Tween<double>(begin: 0.0, end: 1.0),
+    duration: const Duration(milliseconds: 600),
+    curve: Curves.easeOut,
+    builder: (context, value, child) {
+      return Transform.translate(
+        offset: Offset(0, 50 * (1 - value)),
+        child: Opacity(
+          opacity: value,
+          child: TextFormField(
+            controller: controller,
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              labelText: label,
+              prefixIcon: Icon(icon, color: iconColor),
+              filled: true,
+              fillColor: fillColor,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.white70)),
+              suffixIcon: suffixIcon,
+            ),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    },
+  );
 }

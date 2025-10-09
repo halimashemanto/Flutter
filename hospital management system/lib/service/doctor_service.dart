@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hospitalmanagementsystem/entity/doctor_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 
@@ -38,14 +39,23 @@ class DoctorService {
     
     
   }
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+  Future<List<Doctor>> getAllDoctors() async {
+    final response = await http.get(Uri.parse("$baseUrl/api/doctor/"));
+    if (response.statusCode == 200) {
+      List jsonList = json.decode(response.body);
+      return jsonList.map((e) => Doctor.fromJson(e)).toList();
+    } else {
+      throw Exception("Failed to load doctors");
+    }
+  }
   
   
   

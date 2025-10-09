@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:hospitalmanagementsystem/entity/doctor_model.dart';
-import 'package:hospitalmanagementsystem/service/doctor_service.dart';
+import 'package:hospitalmanagementsystem/entity/medicine_model.dart';
+import 'package:hospitalmanagementsystem/service/medicine_service.dart';
 
-class DoctorPage extends StatefulWidget {
-  const DoctorPage({super.key});
+class MedicinePage extends StatefulWidget {
+  const MedicinePage({super.key});
 
   @override
-  State<DoctorPage> createState() => _DoctorPageState();
+  State<MedicinePage> createState() => _MedicinePageState();
 }
 
-class _DoctorPageState extends State<DoctorPage> {
-  late Future<List<Doctor>> _doctors;
+class _MedicinePageState extends State<MedicinePage> {
+  late Future<List<Medicine>> _medicines;
 
   @override
   void initState() {
     super.initState();
-    _doctors = DoctorService().getAllDoctors();
+    _medicines = MedicineService().getAllMedicines();
   }
 
   @override
@@ -24,18 +24,18 @@ class _DoctorPageState extends State<DoctorPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "All Doctors",
+          "Medicines",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 22,
-            letterSpacing: 1.1,
+            letterSpacing: 1.2,
             color: Colors.white,
           ),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+              colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -46,29 +46,33 @@ class _DoctorPageState extends State<DoctorPage> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         ),
       ),
-      body: FutureBuilder<List<Doctor>>(
-        future: _doctors,
+      body: FutureBuilder<List<Medicine>>(
+        future: _medicines,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF38EF7D)),
+              child: CircularProgressIndicator(
+                color: Color(0xFF2575FC),
+              ),
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("Error: ${snapshot.error}",
-                  style: const TextStyle(color: Colors.redAccent)),
+              child: Text(
+                "Error: ${snapshot.error}",
+                style: const TextStyle(color: Colors.redAccent),
+              ),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
-                "No Doctors Found",
+                "No Medicines Found",
                 style: TextStyle(color: Colors.white70, fontSize: 16),
               ),
             );
           } else {
-            final doctors = snapshot.data!;
+            final medicines = snapshot.data!;
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Color(0xFF0F2027), Color(0xFF203A43)],
@@ -77,9 +81,9 @@ class _DoctorPageState extends State<DoctorPage> {
                 ),
               ),
               child: ListView.builder(
-                itemCount: doctors.length,
+                itemCount: medicines.length,
                 itemBuilder: (context, index) {
-                  final doctor = doctors[index];
+                  final medicine = medicines[index];
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     margin: const EdgeInsets.symmetric(vertical: 12),
@@ -89,7 +93,7 @@ class _DoctorPageState extends State<DoctorPage> {
                       gradient: LinearGradient(
                         colors: [
                           Colors.white.withOpacity(0.05),
-                          Colors.white.withOpacity(0.1)
+                          Colors.white.withOpacity(0.12)
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -105,60 +109,54 @@ class _DoctorPageState extends State<DoctorPage> {
                     ),
                     child: Row(
                       children: [
-                        // Doctor photo
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.white12,
-                          backgroundImage: (doctor.photo != null && doctor.photo!.isNotEmpty)
-                              ? NetworkImage("http://localhost:8080/images/doctor/${doctor.photo}")
-                              : const AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF11998e), Color(0xFF38ef7d)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.medical_services,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
                         const SizedBox(width: 18),
-
-                        // Doctor details
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                doctor.name,
+                                medicine.medicineName,
                                 style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    letterSpacing: 0.5),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                doctor.specialization,
-                                style: const TextStyle(
-                                    color: Colors.cyanAccent,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                doctor.email,
-                                style: const TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic),
-                              ),
+
                             ],
                           ),
                         ),
-
-                        // Arrow icon
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+                              colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
                             ),
                           ),
-                          child: const Icon(Icons.arrow_forward_ios,
-                              color: Colors.white, size: 16),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                         ),
                       ],
                     ),

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hospitalmanagementsystem/entity/doctor_model.dart';
-import 'package:hospitalmanagementsystem/service/doctor_service.dart';
+import '../entity/medicine_stock_model.dart';
+import '../service/medicine_stock_service.dart';
 
-class DoctorPage extends StatefulWidget {
-  const DoctorPage({super.key});
+class MedicineStockPage extends StatefulWidget {
+  final String? medicineName; // Optional filter argument
+
+  const MedicineStockPage({super.key, this.medicineName});
 
   @override
-  State<DoctorPage> createState() => _DoctorPageState();
+  State<MedicineStockPage> createState() => _MedicineStockPageState();
 }
 
-class _DoctorPageState extends State<DoctorPage> {
-  late Future<List<Doctor>> _doctors;
+class _MedicineStockPageState extends State<MedicineStockPage> {
+  late Future<List<MedicineStock>> _stocks;
 
   @override
   void initState() {
     super.initState();
-    _doctors = DoctorService().getAllDoctors();
+    _stocks = MedicineStockService().getAllStocks();
   }
 
   @override
@@ -23,19 +25,17 @@ class _DoctorPageState extends State<DoctorPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          "All Doctors",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            letterSpacing: 1.1,
-            color: Colors.white,
-          ),
+        title: Text(
+          widget.medicineName != null
+              ? "Stock: ${widget.medicineName}"
+              : "Pharmacy Stock",
+          style: const TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 1.1),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+              colors: [Color(0xFF0F2027), Color(0xFF203A43)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -46,12 +46,12 @@ class _DoctorPageState extends State<DoctorPage> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         ),
       ),
-      body: FutureBuilder<List<Doctor>>(
-        future: _doctors,
+      body: FutureBuilder<List<MedicineStock>>(
+        future: _stocks,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF38EF7D)),
+              child: CircularProgressIndicator(color: Color(0xFF38ef7d)),
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -61,25 +61,33 @@ class _DoctorPageState extends State<DoctorPage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
-                "No Doctors Found",
+                "No Stocks Found",
                 style: TextStyle(color: Colors.white70, fontSize: 16),
               ),
             );
           } else {
-            final doctors = snapshot.data!;
+            final stocks = snapshot.data!;
+            final filteredStocks = widget.medicineName != null
+                ? stocks
+                .where((s) => s.medicineName
+                .toLowerCase()
+                .contains(widget.medicineName!.toLowerCase()))
+                .toList()
+                : stocks;
+
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF0F2027), Color(0xFF203A43)],
+                  colors: [Color(0xFF0F2027), Color(0xFF1C2833)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
               child: ListView.builder(
-                itemCount: doctors.length,
+                itemCount: filteredStocks.length,
                 itemBuilder: (context, index) {
-                  final doctor = doctors[index];
+                  final stock = filteredStocks[index];
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     margin: const EdgeInsets.symmetric(vertical: 12),
@@ -89,7 +97,7 @@ class _DoctorPageState extends State<DoctorPage> {
                       gradient: LinearGradient(
                         colors: [
                           Colors.white.withOpacity(0.05),
-                          Colors.white.withOpacity(0.1)
+                          Colors.white.withOpacity(0.12)
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -105,56 +113,50 @@ class _DoctorPageState extends State<DoctorPage> {
                     ),
                     child: Row(
                       children: [
-                        // Doctor photo
                         CircleAvatar(
                           radius: 30,
                           backgroundColor: Colors.white12,
-                          backgroundImage: (doctor.photo != null && doctor.photo!.isNotEmpty)
-                              ? NetworkImage("http://localhost:8080/images/doctor/${doctor.photo}")
-                              : const AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
+                          child: const Icon(
+                            Icons.medical_services,
+                            color: Colors.white70,
+                            size: 28,
+                          ),
                         ),
                         const SizedBox(width: 18),
-
-                        // Doctor details
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                doctor.name,
+                                stock.medicineName,
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    letterSpacing: 0.5),
+                                    fontSize: 18),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                doctor.specialization,
+                                "Batch: ${stock.batchNo} | Exp: ${stock.expiryDate.toString().split(' ')[0]}",
                                 style: const TextStyle(
                                     color: Colors.cyanAccent,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 2),
                               Text(
-                                doctor.email,
+                                "Quantity: ${stock.quantity} | Price: \$${stock.purchasePrice.toStringAsFixed(2)}",
                                 style: const TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic),
+                                    color: Colors.white70, fontSize: 12),
                               ),
                             ],
                           ),
                         ),
-
-                        // Arrow icon
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+                              colors: [Color(0xFF11998e), Color(0xFF38ef7d)],
                             ),
                           ),
                           child: const Icon(Icons.arrow_forward_ios,

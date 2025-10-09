@@ -54,11 +54,13 @@ class _RegistrationState extends State<Registration> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00C6FF), Color(0xFF0072FF)], // fresh blue gradient
+            colors: [Color(0xFFA1FFCE), Color(0xFFFAFFD1)], // mint → ivory white
+            // colors: [Color(0xFFB2FEFA), Color(0xFF0ED2F7)], // mint teal → sky blue
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
+
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -88,13 +90,13 @@ class _RegistrationState extends State<Registration> {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    "Trust, Hope & Healing — Your Health Our Priority",
+                    "Trust, Hope & Healing — Your Health Our Priority.🌿🌿",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
-                        color: Colors.white),
+                        color: Colors.green),
                   ),
                   const SizedBox(height: 30),
 

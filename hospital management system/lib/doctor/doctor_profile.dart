@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
+import 'package:hospitalmanagementsystem/page/test_page.dart';
+import 'package:hospitalmanagementsystem/page/medicine_page.dart';
 
 
 
@@ -66,12 +68,29 @@ class DoctorProfile extends StatelessWidget {
 
             // 🟣 Menu Items (you can add more later)
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('My Profile'),
+              leading: const Icon(Icons.medical_services), // Test related icon
+              title: const Text('Test'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context); // Close the drawer first
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TestPage()),
+                );
               },
             ),
+
+            ListTile(
+              leading: const Icon(Icons.medical_services),
+              title: const Text('Medicines'),
+              onTap: () {
+                Navigator.pop(context); // Drawer close
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MedicinePage()),
+                );
+              },
+            ),
+
 
 
 

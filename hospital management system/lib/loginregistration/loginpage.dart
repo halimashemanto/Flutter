@@ -7,6 +7,7 @@ import 'package:hospitalmanagementsystem/profile/nurse_profile.dart';
 import 'package:hospitalmanagementsystem/profile/office_staff_profile.dart';
 import 'package:hospitalmanagementsystem/profile/receptionist_profile.dart';
 import 'package:hospitalmanagementsystem/role/adminpage.dart';
+import 'package:hospitalmanagementsystem/service/admin_service.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:hospitalmanagementsystem/service/doctor_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,6 +33,7 @@ class LoginPage extends StatelessWidget {
   NurseService nurseService = NurseService();
   ReceptionistService receptionistService = ReceptionistService();
   OfficeStaffService officeStaffService = OfficeStaffService();
+  AdminService adminService = AdminService();
 
 
 
@@ -76,7 +78,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         const Text(
-                          "Trust, Hope & Healing — Your Health Our Priority",
+                          "Trust, Hope & Healing — Your Health Our Priority.🌿🌿",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
@@ -168,12 +170,21 @@ class LoginPage extends StatelessWidget {
 
 
       if (role == 'Admin') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AdminPage()),
-        );
-      }
+        final adminProfile = await adminService.getAdminProfile();
 
+        if (adminProfile != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminProfile(adminProfile: adminProfile),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to load admin profile. Please try again.')),
+          );
+        }
+      }
       else if (role == 'Doctor') {
         final profile = await doctorService.getDoctorProfile();
 

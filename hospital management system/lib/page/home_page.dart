@@ -16,15 +16,15 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
   late final Animation<double> _fadeAnimation;
 
   final List<String> carouselImages = [
-    'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/5452191/pexels-photo-5452191.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3825529/pexels-photo-3825529.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/5355597/pexels-photo-5355597.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/4173250/pexels-photo-4173250.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'https://images.pexels.com/photos/3845764/pexels-photo-3845764.jpeg?auto=compress&cs=tinysrgb&w=800',
   ];
 
   final List<String> carouselTexts = [
-    "Advanced Surgery & Equipment",
-    "Expert Doctors You Can Trust",
-    "Caring Nurses and Staff",
+    "Cutting-edge Medical Equipment",
+    "Expert Doctors & Caring Staff",
+    "Comprehensive Patient Care",
   ];
 
   @override
@@ -68,25 +68,70 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+        backgroundColor: Colors.purple.shade700,
+        title: const Text("Health Care BD"),
+        // centerTitle: true,
+        // leading: Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Image.asset(
+        //     'assets/images/logo.png', // logo path
+        //     fit: BoxFit.contain,
+        //   ),
+        // ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/register');
+            },
+            child: const Text("Registration", style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/departments');
+            },
+            child: const Text("Departments", style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/doctors');
+            },
+            child: const Text("Doctors", style: TextStyle(color: Colors.white)),
+          ),
+          //======apatoto off ei button a kono kaj nei tai
+
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/pharmacy');
+          //   },
+          //   child: const Text("Pharmacy", style: TextStyle(color: Colors.white)),
+          // ),
+          // const SizedBox(width: 8),
+        ],
+      ),
+
       body: Stack(
         children: [
-          // ===== Background =====
-          SizedBox.expand(
-            child: Image.network(
-              carouselImages[_currentPage],
-              fit: BoxFit.cover,
+          // ===== Background Gradient =====
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFd9b3ff), Color(0xFF8ec5fc)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ),
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-            child: Container(color: Colors.black.withOpacity(0.3)),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(color: Colors.black.withOpacity(0.15)),
           ),
 
           // ===== Scroll Content =====
           SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
 
                 // ===== Hero Section =====
                 FadeTransition(
@@ -98,24 +143,17 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: Colors.tealAccent.shade100,
+                          color: Colors.purple.shade700,
                           shadows: const [
-                            Shadow(
-                                color: Colors.black45,
-                                offset: Offset(2, 2),
-                                blurRadius: 4)
+                            Shadow(color: Colors.black38, offset: Offset(2, 2), blurRadius: 4)
                           ],
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 12),
                       const Text(
-                        "Trust, Hope & Healing —"
-                            " Your Health Our Priority",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white70,
-                        ),
+                        "Trust, Hope & Healing — Your Health, Our Priority",
+                        style: TextStyle(fontSize: 18, color: Colors.white70),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 25),
@@ -130,20 +168,16 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                             },
                             icon: const Icon(Icons.calendar_month_outlined),
                             label: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 20),
-                              child: Text(
-                                "Book Appointment",
-                                style: TextStyle(fontSize: 16),
-                              ),
+                              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                              child: Text("Book Appointment", style: TextStyle(fontSize: 16)),
                             ),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.tealAccent.shade700,
+                              backgroundColor: Colors.purple.shade50,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               elevation: 10,
-                              shadowColor: Colors.tealAccent.shade400,
+                              shadowColor: Colors.purple.shade400,
                             ),
                           ),
                           OutlinedButton.icon(
@@ -152,12 +186,8 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                             },
                             icon: const Icon(Icons.login, color: Colors.white),
                             label: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 18),
-                              child: Text(
-                                "Login",
-                                style: TextStyle(fontSize: 16, color: Colors.white),
-                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 18),
+                              child: Text("Login", style: TextStyle(fontSize: 16, color: Colors.white)),
                             ),
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.white70),
@@ -172,7 +202,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                   ),
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
 
                 // ===== Carousel =====
                 SizedBox(
@@ -211,9 +241,9 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                     runSpacing: 16,
                     alignment: WrapAlignment.center,
                     children: [
-                      buildFeatureCard(Icons.local_hospital, "Departments", "Modern & well-equipped"),
+                      buildFeatureCard(Icons.local_hospital, "Departments", "Explore all"),
                       buildFeatureCard(Icons.people, "Doctors", "Expert & friendly staff"),
-                      buildFeatureCard(Icons.health_and_safety, "Services", "Full patient care"),
+                      buildFeatureCard(Icons.app_registration, "Register", "Sign up today"),
                       buildFeatureCard(Icons.healing, "Pharmacy", "Medicines available"),
                     ],
                   ),
@@ -222,65 +252,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                 const SizedBox(height: 50),
 
                 // ===== Footer =====
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.teal.shade800, Colors.teal.shade900],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Health Care Of Bangladesh",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.location_on, color: Colors.white70, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            "Dhaka, Bangladesh",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.phone, color: Colors.white70, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            "+880123456789",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                          SizedBox(width: 10),
-                          Icon(Icons.email, color: Colors.white70, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            "info@healthcarebd.com",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "© 2025 Health Care Of Bangladesh. All rights reserved.",
-                        style: TextStyle(color: Colors.white54, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
+                buildFooter(),
               ],
             ),
           ),
@@ -289,7 +261,6 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
     );
   }
 
-  // ===== Carousel Card =====
   Widget buildCarouselCard(String url, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -297,7 +268,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.network(url, fit: BoxFit.cover, width: double.infinity,alignment: Alignment.topCenter,),
+            child: Image.network(url, fit: BoxFit.cover, width: double.infinity),
           ),
           Container(
             decoration: BoxDecoration(
@@ -329,15 +300,19 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
     );
   }
 
-  // ===== Feature Card =====
   Widget buildFeatureCard(IconData icon, String title, String subtitle) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          if (title == "Departments") Navigator.pushNamed(context, '/departments');
+          if (title == "Doctors") Navigator.pushNamed(context, '/doctors');
+          if (title == "Register") Navigator.pushNamed(context, '/register');
+          if (title == "Pharmacy") Navigator.pushNamed(context, '/pharmacy');
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: 130,
+          width: 140,
           height: 150,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -350,22 +325,63 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: Colors.teal.shade700),
+              Icon(icon, size: 40, color: Colors.purple.shade700),
               const SizedBox(height: 10),
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center),
               const SizedBox(height: 5),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.black54),
-                textAlign: TextAlign.center,
-              ),
+              Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.black54), textAlign: TextAlign.center),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildFooter() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.purple.shade800, Colors.purple.shade900],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        children: [
+          const Text(
+            "Health Care Of Bangladesh",
+            style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.location_on, color: Colors.white70, size: 16),
+              SizedBox(width: 4),
+              Text("Dhaka, Bangladesh", style: TextStyle(color: Colors.white70)),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.phone, color: Colors.white70, size: 16),
+              SizedBox(width: 4),
+              Text("+880123456789", style: TextStyle(color: Colors.white70)),
+              SizedBox(width: 10),
+              Icon(Icons.email, color: Colors.white70, size: 16),
+              SizedBox(width: 4),
+              Text("info@healthcarebd.com", style: TextStyle(color: Colors.white70)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "© 2025 Health Care Of Bangladesh. All rights reserved.",
+            style: TextStyle(color: Colors.white54, fontSize: 12),
+          ),
+        ],
       ),
     );
   }

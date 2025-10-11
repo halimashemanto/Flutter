@@ -5,6 +5,7 @@ import 'package:hospitalmanagementsystem/page/department_page.dart';
 import 'package:hospitalmanagementsystem/page/all_nurse_page.dart';
 import 'package:hospitalmanagementsystem/page/appointment_page.dart';
 import 'package:hospitalmanagementsystem/profile/doctor_profile.dart';
+import 'package:hospitalmanagementsystem/page/department_doctor_filter_page.dart';
 
 
 class AdminProfile extends StatelessWidget {
@@ -109,6 +110,18 @@ class AdminProfile extends StatelessWidget {
               },
             ),
 
+
+
+            ListTile(
+              leading: const Icon(Icons.local_hospital),
+              title: const Text('filter dep'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DepartmentDoctorPage()),
+                );
+              },
+            ),
 
 
 

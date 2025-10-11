@@ -73,8 +73,59 @@ class DoctorService {
       throw Exception('Failed to fetch doctors');
     }
   }
-  
-  
-  
-  
+
+
+
+
+
+  /// ✅ Get doctors filtered by department ID
+
+
+
+    Future<List<Doctor>> getDoctorsByDepartment(int deptId) async {
+      final url = Uri.parse("$baseUrl/api/doctor/by-department/$deptId"); // include /api
+      final response = await http.get(url); // no token needed for visitors
+
+      if (response.statusCode == 200) {
+        List jsonList = json.decode(response.body);
+        return jsonList.map((e) => Doctor.fromJson(e)).toList();
+      } else {
+        throw Exception(
+            "Failed to load doctors: ${response.statusCode} - ${response.body}");
+      }
+    }
+
+
+
+
+
+
+
+/// ✅ Visitor-friendly: Get doctors by department WITHOUT token
+Future<List<Doctor>> getDoctorsByDepartmentWithoutToken(int departmentId) async {
+  final url = Uri.parse("baseUrl/api/doctor/by-department/$departmentId");
+
+  final response = await http.get(url); // Token নেই, সোজা GET
+
+  if (response.statusCode == 200) {
+    List jsonList = json.decode(response.body);
+    return jsonList.map((e) => Doctor.fromJson(e)).toList();
+  } else {
+    throw Exception(
+        "Failed to load doctors: ${response.statusCode} - ${response.body}");
+  }
 }
+
+
+
+
+
+
+
+}
+
+
+
+
+  
+  

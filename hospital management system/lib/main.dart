@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
+import 'package:hospitalmanagementsystem/loginregistration/registrationpage.dart';
 import 'package:hospitalmanagementsystem/page/appointment_page.dart';
+import 'package:hospitalmanagementsystem/page/department_doctor_filter_page.dart';
+import 'package:hospitalmanagementsystem/page/department_page.dart';
 import 'package:hospitalmanagementsystem/page/home_page.dart';
+import 'package:hospitalmanagementsystem/profile/doctor_profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +29,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginPage(),                 // Login page
         '/appointment': (context) => const AppointmentPageWidget(), // Appointment page
+        '/register': (context) => const Registration(), // Registration page
+        '/departments': (context) => const DepartmentDoctorPage(), // DepartmentPage
+        '/doctors': (context) => const DoctorPage(), // Doctor Page profile
       },
     );
   }

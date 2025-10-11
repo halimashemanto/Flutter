@@ -88,10 +88,10 @@ class _TestPageState extends State<TestPage> {
                       title: Text(test.testName,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
-                      trailing: Text("\$${test.testPrice.toStringAsFixed(2)}",
-                          style: const TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold)),
+                      // trailing: Text("\$${test.testPrice.toStringAsFixed(2)}",
+                      //     style: const TextStyle(
+                      //         color: Colors.green,
+                      //         fontWeight: FontWeight.bold)),
                     ),
                   );
                 },

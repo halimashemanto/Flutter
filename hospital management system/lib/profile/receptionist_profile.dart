@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:hospitalmanagementsystem/page/schedule_slot_page.dart';
+import 'package:hospitalmanagementsystem/page/test_filter_page.dart';
 
 
 
@@ -82,6 +83,18 @@ class ReceptionistProfile extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ScheduleSlotPage()),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.schedule),
+              title: const Text('Tests'),
+              onTap: () {
+                Navigator.pop(context); // Close drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TestPage()),
                 );
               },
             ),

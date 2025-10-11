@@ -22,4 +22,28 @@ class DepartmentService {
       throw Exception("Error fetching departments: $e");
     }
   }
+
+
+
+
+
+
+
+  /// ✅ Alias method — same as getDepartments()
+  /// so UI code `_departmentService.getAllDepartments()` still works
+  Future<List<Department>> getAllDepartments() async {
+    return await getDepartments();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 }

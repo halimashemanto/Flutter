@@ -2,12 +2,10 @@ import 'dart:io';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:radio_group_v2/radio_group_v2.dart';
 import 'package:radio_group_v2/radio_group_v2.dart' as v2;
 
 class Registration extends StatefulWidget {
@@ -23,44 +21,43 @@ class _RegistrationState extends State<Registration> {
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-
   final TextEditingController confirmPassword = TextEditingController();
   final TextEditingController cell = TextEditingController();
   final TextEditingController address = TextEditingController();
 
-  final RadioGroupController genderController = RadioGroupController();
-
+  final v2.RadioGroupController genderController = v2.RadioGroupController();
   final DateTimeFieldPickerPlatform dob = DateTimeFieldPickerPlatform.material;
 
   String? selectedGender;
-
   DateTime? selectedDOB;
-
   XFile? selectedImage;
-
   Uint8List? webImage;
-
   final ImagePicker _picker = ImagePicker();
-
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-
-
-
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreenAccent.shade700,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text("Doctor Registration"),
+        centerTitle: true,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFA1FFCE), Color(0xFFFAFFD1)], // mint → ivory white
-            // colors: [Color(0xFFB2FEFA), Color(0xFF0ED2F7)], // mint teal → sky blue
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -207,15 +204,15 @@ class _RegistrationState extends State<Registration> {
                               fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                         v2.RadioGroup(
-                          controller: genderController,
-                          values: const ["Male", "Female", "Other"],
-                          indexOfDefault: 2,
-                          orientation: RadioGroupOrientation.horizontal,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedGender = newValue.toString();
-                            });
-                          }
+                            controller: genderController,
+                            values: const ["Male", "Female", "Other"],
+                            indexOfDefault: 2,
+                            orientation: v2.RadioGroupOrientation.horizontal,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedGender = newValue.toString();
+                              });
+                            }
                         ),
                       ],
                     ),
@@ -299,30 +296,19 @@ class _RegistrationState extends State<Registration> {
           ),
         ),
       ),
-
-
-
-
-
-
-
     );
   }
 
   Future<void> pickImage() async {
     if (kIsWeb) {
-      // For Web: Use image_picker_web to pick image and store as bytes
       var pickedImage = await ImagePickerWeb.getImageAsBytes();
       if (pickedImage != null) {
         setState(() {
-          webImage = pickedImage; // Store the picked image as Uint8List
+          webImage = pickedImage;
         });
       }
     } else {
-      // For Mobile: Use image_picker to pick image
-      final XFile? pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery,
-      );
+      final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         setState(() {
           selectedImage = pickedImage;
@@ -331,39 +317,24 @@ class _RegistrationState extends State<Registration> {
     }
   }
 
-  /// Method to handle  DOCTOR registration
   void _register() async {
-    // ✅ Check if the form (text fields) is valid
     if (_formKey.currentState!.validate()) {
-      // ✅ Check if password and confirm password match
       if (password.text != confirmPassword.text) {
-        // Show an error message if passwords don’t match
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Passwords do not match!')));
-        return; // stop further execution
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Passwords do not match!')));
+        return;
       }
 
-      // ✅ Validate that the user has selected an image
-      if (kIsWeb) {
-        // On Web → check if webImage (Uint8List) is selected
-        if (webImage == null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Please select an image.')));
-          return; // stop further execution
-        }
-      } else {
-        // On Mobile/Desktop → check if image file is selected
-        if (selectedImage == null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Please select an image.')));
-          return; // stop further execution
-        }
+      if (kIsWeb && webImage == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Please select an image.')));
+        return;
+      } else if (!kIsWeb && selectedImage == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Please select an image.')));
+        return;
       }
 
-      // ✅ Prepare User object (basic login info)
       final user = {
         "name": name.text,
         "email": email.text,
@@ -371,70 +342,33 @@ class _RegistrationState extends State<Registration> {
         "password": password.text,
       };
 
-      // ✅ Prepare DOCTOR object (extra personal info)
       final doctor = {
         "name": name.text,
         "email": email.text,
         "phone": cell.text,
         "gender": selectedGender ?? "Other",
-        // fallback if null
         "address": address.text,
         "dateOfBirth": selectedDOB?.toIso8601String() ?? "",
-        // convert DateTime to ISO string
       };
 
-      // ✅ Initialize your API Service
       final apiService = AuthService();
-
-      // ✅ Track API call success or failure
       bool success = false;
 
-      // ✅ Send registration request (different handling for Web vs Mobile)
       if (kIsWeb && webImage != null) {
-        // For Web → send photo as bytes
-        success = await apiService.registerDoctorWeb(
-          user: user,
-          doctor: doctor,
-          photoBytes: webImage!, // safe to use ! because already checked above
-        );
+        success = await apiService.registerDoctorWeb(user: user, doctor: doctor, photoBytes: webImage!);
       } else if (selectedImage != null) {
-        // For Mobile → send photo as file
-        success = await apiService.registerDoctorWeb(
-          user: user,
-          doctor: doctor,
-          photoFile: File(
-            selectedImage!.path,
-          ), // safe to use ! because already checked above
-        );
+        success = await apiService.registerDoctorWeb(user: user, doctor: doctor, photoFile: File(selectedImage!.path));
       }
 
-      // ✅ Handle the API response
       if (success) {
-        // Show success message
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Registration Successful')));
-
-        // Redirect user to Login Page after successful registration
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Registration Successful')));
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
-      } else {}
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      }
     }
   }
 }
-
-//======End class of Registration ============
-
-
-
-
-
-
-
-
-
 
 // ---------------- Helper Method ----------------
 Widget _buildAnimatedField({

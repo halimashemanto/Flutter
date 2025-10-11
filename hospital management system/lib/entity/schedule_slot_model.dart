@@ -21,7 +21,11 @@ class ScheduleSlot {
       date: json['date'],
       startTime: json['startTime'],
       endTime: json['endTime'],
-      isBooked: json['booked'] ?? false,
+      isBooked: json['booked'] == true,  
+
+
+
+
       doctorName: json['doctorName'] ?? 'Unknown',
     );
   }

@@ -3,6 +3,7 @@ import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:hospitalmanagementsystem/page/department_page.dart';
 import 'package:hospitalmanagementsystem/page/all_nurse_page.dart';
+import 'package:hospitalmanagementsystem/page/appointment_page.dart';
 import 'package:hospitalmanagementsystem/profile/doctor_profile.dart';
 
 
@@ -97,6 +98,16 @@ class AdminProfile extends StatelessWidget {
               },
             ),
 
+            ListTile(
+              leading: const Icon(Icons.local_hospital),
+              title: const Text('Appointment'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppointmentPageWidget()),
+                );
+              },
+            ),
 
 
 

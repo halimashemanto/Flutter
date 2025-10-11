@@ -56,11 +56,23 @@ class DoctorService {
       throw Exception("Failed to load doctors");
     }
   }
-  
-  
-  
-  
-  
+
+
+
+
+  Future<List<Map<String, dynamic>>> getAllDoctor() async {
+    final response = await http.get(Uri.parse(baseUrl));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      // expect: [{id:1, name:"Dr. Smith"}, ...]
+      return data.map((e) => {
+        'id': e['id'],
+        'name': e['name'],
+      }).toList();
+    } else {
+      throw Exception('Failed to fetch doctors');
+    }
+  }
   
   
   

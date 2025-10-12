@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
+import 'package:hospitalmanagementsystem/page/appointment_view_page.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:hospitalmanagementsystem/page/medicine_stock_page.dart';
 
@@ -76,12 +77,12 @@ class OfficeStaffProfile extends StatelessWidget {
 
             ListTile(
               leading: const Icon(Icons.inventory_2),
-              title: const Text('Medicine Stock'),
+              title: const Text('View Appointment'),
               onTap: () {
                 Navigator.pop(context); // Close drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const MedicineStockPage()),
+                  MaterialPageRoute(builder: (context) => const AppointmentPage()),
                 );
               },
             ),

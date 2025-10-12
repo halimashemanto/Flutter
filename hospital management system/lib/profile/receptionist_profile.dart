@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalmanagementsystem/loginregistration/loginpage.dart';
+import 'package:hospitalmanagementsystem/page/appointment_view_page.dart';
 import 'package:hospitalmanagementsystem/service/auth_service.dart';
 import 'package:hospitalmanagementsystem/page/schedule_slot_page.dart';
 import 'package:hospitalmanagementsystem/page/test_filter_page.dart';
@@ -98,6 +99,20 @@ class ReceptionistProfile extends StatelessWidget {
                 );
               },
             ),
+
+
+            ListTile(
+              leading: const Icon(Icons.inventory_2),
+              title: const Text('View Appointment'),
+              onTap: () {
+                Navigator.pop(context); // Close drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AppointmentPage()),
+                );
+              },
+            ),
+
 
 
             ListTile(

@@ -16,7 +16,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
   late final Animation<double> _fadeAnimation;
 
   final List<String> carouselImages = [
-    'https://images.pexels.com/photos/5355597/pexels-photo-5355597.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://static.vecteezy.com/system/resources/thumbnails/053/732/919/small/cutting-edge-medical-tools-showcased-in-a-modern-surgical-suite-design-photo.jpg',
     'https://images.pexels.com/photos/4173250/pexels-photo-4173250.jpeg?auto=compress&cs=tinysrgb&w=800',
     'https://images.pexels.com/photos/3845764/pexels-photo-3845764.jpeg?auto=compress&cs=tinysrgb&w=800',
   ];
@@ -70,44 +70,66 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         backgroundColor: Colors.purple.shade700,
-        title: const Text("Health Care BD"),
-        // centerTitle: true,
-        // leading: Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Image.asset(
-        //     'assets/images/logo.png', // logo path
-        //     fit: BoxFit.contain,
-        //   ),
-        // ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/register');
-            },
-            child: const Text("Registration", style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/departments');
-            },
-            child: const Text("Departments", style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/doctors');
-            },
-            child: const Text("Doctors", style: TextStyle(color: Colors.white)),
-          ),
-          //======apatoto off ei button a kono kaj nei tai
 
+        elevation: 4,
+        leadingWidth: 60,
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Image.network(
+            'https://cdn-icons-png.flaticon.com/512/2966/2966485.png', // hospital logo
+            fit: BoxFit.contain,
+          ),
+        ),
+        actions: [
           // TextButton(
           //   onPressed: () {
-          //     Navigator.pushNamed(context, '/pharmacy');
+          //     Navigator.pushNamed(context, '/register');
           //   },
-          //   child: const Text("Pharmacy", style: TextStyle(color: Colors.white)),
+          //   child: const Text("Registration", style: TextStyle(color: Colors.white)),
           // ),
-          // const SizedBox(width: 8),
-        ],
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/departments');
+          //   },
+          //   child: const Text("Departments", style: TextStyle(color: Colors.white)),
+          // ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/doctors');
+          //   },
+          //   child: const Text("Doctors", style: TextStyle(color: Colors.white)),
+          // ),
+          //======apatoto off ei button a kono kaj nei tai
+
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/contact');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple.shade200, // button background
+                  foregroundColor: Colors.purple.shade700, // text & icon color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // rounded corners
+                  ),
+                  elevation: 5,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                child: const Text(
+                  "Contact Us",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ],
+
+
+
       ),
 
       body: Stack(
@@ -153,7 +175,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                       const SizedBox(height: 12),
                       const Text(
                         "Trust, Hope & Healing — Your Health, Our Priority",
-                        style: TextStyle(fontSize: 18, color: Colors.white70),
+                        style: TextStyle(fontSize: 16, color: Colors.white70),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 25),
@@ -244,7 +266,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
                       buildFeatureCard(Icons.local_hospital, "Departments", "Explore all"),
                       buildFeatureCard(Icons.people, "Doctors", "Expert & friendly staff"),
                       buildFeatureCard(Icons.app_registration, "Register", "Sign up today"),
-                      buildFeatureCard(Icons.healing, "Pharmacy", "Medicines available"),
+                      buildFeatureCard(Icons.healing, "Facility", "Facilities available"),
                     ],
                   ),
                 ),
@@ -308,7 +330,7 @@ class _ModernHomePageState extends State<ModernHomePage> with TickerProviderStat
           if (title == "Departments") Navigator.pushNamed(context, '/departments');
           if (title == "Doctors") Navigator.pushNamed(context, '/doctors');
           if (title == "Register") Navigator.pushNamed(context, '/register');
-          if (title == "Pharmacy") Navigator.pushNamed(context, '/pharmacy');
+          if (title == "Facility") Navigator.pushNamed(context, '/facility');
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),

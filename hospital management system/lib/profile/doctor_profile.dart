@@ -9,6 +9,8 @@ class DoctorPage extends StatefulWidget {
   State<DoctorPage> createState() => _DoctorPageState();
 }
 
+final String baseUrl = "http://localhost:8080/images/doctor/";
+
 class _DoctorPageState extends State<DoctorPage> {
   late Future<List<Doctor>> _doctors;
 
@@ -21,26 +23,15 @@ class _DoctorPageState extends State<DoctorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "All Doctors",
+          "Our Doctors",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            letterSpacing: 1.1,
-            color: Colors.white,
-          ),
+              fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
+        backgroundColor: Colors.purple.shade700,
         elevation: 6,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
@@ -51,125 +42,135 @@ class _DoctorPageState extends State<DoctorPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF38EF7D)),
+              child: CircularProgressIndicator(color: Colors.purple),
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("Error: ${snapshot.error}",
-                  style: const TextStyle(color: Colors.redAccent)),
+              child: Text(
+                "Error: ${snapshot.error}",
+                style: const TextStyle(color: Colors.redAccent),
+              ),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
                 "No Doctors Found",
-                style: TextStyle(color: Colors.white70, fontSize: 16),
+                style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
             );
           } else {
             final doctors = snapshot.data!;
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0F2027), Color(0xFF203A43)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: doctors
+                      .map((doctor) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: DoctorCard(doctor: doctor),
+                  ))
+                      .toList(),
                 ),
-              ),
-              child: ListView.builder(
-                itemCount: doctors.length,
-                itemBuilder: (context, index) {
-                  final doctor = doctors[index];
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 400),
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.white.withOpacity(0.05),
-                          Colors.white.withOpacity(0.1)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      border: Border.all(color: Colors.white24, width: 1),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 12,
-                          offset: Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        // Doctor photo
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.white12,
-                          backgroundImage: (doctor.photo != null && doctor.photo!.isNotEmpty)
-                              ? NetworkImage("http://localhost:8080/images/doctor/${doctor.photo}")
-                              : const AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
-                        ),
-                        const SizedBox(width: 18),
-
-                        // Doctor details
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                doctor.name,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    letterSpacing: 0.5),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                doctor.specialization,
-                                style: const TextStyle(
-                                    color: Colors.cyanAccent,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                doctor.email,
-                                style: const TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Arrow icon
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
-                            ),
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios,
-                              color: Colors.white, size: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                },
               ),
             );
           }
         },
       ),
-      backgroundColor: const Color(0xFF0F2027),
+
+
+
+    );
+  }
+}
+
+class DoctorCard extends StatelessWidget {
+  final Doctor doctor;
+  const DoctorCard({super.key, required this.doctor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 280,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        gradient: LinearGradient(
+          colors: [Colors.purpleAccent.shade100, Colors.white.withOpacity(0.1)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border.all(color: Colors.white24),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Doctor photo
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.purpleAccent,
+            backgroundImage: (doctor.photo != null && doctor.photo!.isNotEmpty)
+                ? NetworkImage("$baseUrl${doctor.photo!}")
+                : const AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
+          ),
+
+          const SizedBox(height: 12),
+
+          // Name
+          Text(
+            doctor.name,
+            style: const TextStyle(
+                color: Colors.purple, fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+
+          // Status
+          Text(
+            "Status: ${doctor.status}",
+            style: const TextStyle(color: Colors.black, fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+        // study
+          Text(
+            "Study: ${doctor.study}",
+            style: const TextStyle(color: Colors.black, fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+
+          // Email
+          Text(
+            "Email: ${doctor.email}",
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 2),
+
+          // Phone
+          Text(
+            "Phone: ${doctor.phone}",
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 2),
+          // chamber
+          Text(
+            "Chamber: ${doctor.chamber}",
+            style: const TextStyle(color: Colors.black, fontSize: 13),
+            textAlign: TextAlign.center,
+          ),
+
+
+        ],
+      ),
     );
   }
 }

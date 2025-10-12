@@ -47,7 +47,7 @@ class _RegistrationState extends State<Registration> {
             Navigator.pop(context);
           },
         ),
-        title: const Text("Doctor Registration"),
+        title: const Text("Registration"),
         centerTitle: true,
       ),
       body: Container(

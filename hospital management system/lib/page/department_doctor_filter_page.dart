@@ -40,8 +40,9 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
         _filteredDepartments = departments;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to load departments: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load departments: $e')),
+      );
     } finally {
       setState(() => _deptLoading = false);
     }
@@ -49,8 +50,7 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
 
   void _filterDepartments(String query) {
     final filtered = _departments
-        .where((dept) =>
-        dept.departmentName.toLowerCase().contains(query.toLowerCase()))
+        .where((dept) => dept.departmentName.toLowerCase().contains(query.toLowerCase()))
         .toList();
     setState(() {
       _filteredDepartments = filtered;
@@ -66,8 +66,9 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
     try {
       _doctors = await _doctorService.getDoctorsByDepartment(departmentId);
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Failed to load doctors: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load doctors: $e")),
+      );
     } finally {
       setState(() => _doctorLoading = false);
     }
@@ -103,7 +104,7 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFe0c3fc), Color(0xFF8ec5fc)], // light purple gradient
+            colors: [Color(0xFFe0c3fc), Color(0xFF8ec5fc)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -119,6 +120,7 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
     );
   }
 
+  // ----------------- Department Grid View -----------------
   Widget _buildDepartmentView() {
     return Column(
       children: [
@@ -200,51 +202,69 @@ class _DepartmentDoctorPageState extends State<DepartmentDoctorPage> {
     );
   }
 
+  // ----------------- Doctor Cards -----------------
   Widget _buildDoctorCards() {
     return ListView.builder(
       padding: const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 16),
       itemCount: _doctors.length,
       itemBuilder: (context, index) {
         final doc = _doctors[index];
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.white, Color(0xFFf3e5f5)], // subtle purple glass
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.purple.withOpacity(0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.purple.shade50,
-              backgroundImage: (doc.photo != null && doc.photo!.isNotEmpty)
-                  ? NetworkImage("http://localhost:8080/images/doctor/${doc.photo}")
-                  : const AssetImage('assets/images/default_avatar.jpg')
-              as ImageProvider,
-              child: (doc.photo == null || doc.photo!.isEmpty)
-                  ? const Icon(Icons.person, color: Colors.purple, size: 30)
-                  : null,
-            ),
-            title: Text(doc.name,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            subtitle: Text(doc.specialization ?? "General Practitioner",
-                style: const TextStyle(color: Colors.black54)),
-            trailing:
-            const Icon(Icons.arrow_forward_ios, color: Colors.purple, size: 18),
-          ),
-        );
+        return DoctorCard(doctor: doc);
       },
+    );
+  }
+}
+
+// ----------------- Doctor Card -----------------
+class DoctorCard extends StatelessWidget {
+  final Doctor doctor;
+  const DoctorCard({super.key, required this.doctor});
+
+  @override
+  Widget build(BuildContext context) {
+    final String baseUrl = "http://localhost:8080/images/doctor/";
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.white, Color(0xFFf3e5f5)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.purple.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.purple.shade50,
+            backgroundImage: (doctor.photo != null && doctor.photo!.isNotEmpty)
+                ? NetworkImage("$baseUrl${doctor.photo}")
+                : const AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            doctor.name,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.purple),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text("Status: ${doctor.status}", style: const TextStyle(color: Colors.black)),
+          Text("Study: ${doctor.study}", style: const TextStyle(color: Colors.black)),
+          Text("Email: ${doctor.email}", style: const TextStyle(color: Colors.black, fontSize: 12)),
+          Text("Phone: ${doctor.phone}", style: const TextStyle(color: Colors.black, fontSize: 12)),
+          Text("Chamber: ${doctor.chamber}", style: const TextStyle(color: Colors.black, fontSize: 13)),
+        ],
+      ),
     );
   }
 }

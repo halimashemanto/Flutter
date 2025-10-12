@@ -68,7 +68,7 @@ class DoctorProfile extends StatelessWidget {
 
             // 🟣 Menu Items (you can add more later)
             ListTile(
-              leading: const Icon(Icons.medical_services), // Test related icon
+              leading: const Icon(Icons.medical_services),
               title: const Text('Test'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer first

@@ -9,6 +9,7 @@ class DoctorService {
   
   
   final String baseUrl = "http://localhost:8080";
+  final AuthService _authService = AuthService();
   
   Future<Map<String,dynamic>?> getDoctorProfile() async{
     String? token = await AuthService().getToken();
@@ -46,78 +47,101 @@ class DoctorService {
 
 
 
-
+  // All doctors
   Future<List<Doctor>> getAllDoctors() async {
-    final response = await http.get(Uri.parse("$baseUrl/api/doctor/"));
+    String? token = await _authService.getToken();
+
+    if (token == null) {
+      print('No Token Found, Please login first.');
+      return [];
+    }
+
+    final response = await http.get(
+      Uri.parse("$baseUrl/api/doctor/"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
     if (response.statusCode == 200) {
       List jsonList = json.decode(response.body);
       return jsonList.map((e) => Doctor.fromJson(e)).toList();
     } else {
+      print('Failed to load doctors: ${response.statusCode} - ${response.body}');
       throw Exception("Failed to load doctors");
     }
   }
 
-
-
-
+  //Lightweight list for dropdowns etc.
   Future<List<Map<String, dynamic>>> getAllDoctor() async {
-    final response = await http.get(Uri.parse(baseUrl));
+    String? token = await _authService.getToken();
+
+    if (token == null) {
+      print('No Token Found, Please login first.');
+      return [];
+    }
+
+    final response = await http.get(
+      Uri.parse("$baseUrl/api/doctor/"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      // expect: [{id:1, name:"Dr. Smith"}, ...]
       return data.map((e) => {
         'id': e['id'],
         'name': e['name'],
       }).toList();
     } else {
+      print('Failed to fetch doctors: ${response.statusCode} - ${response.body}');
       throw Exception('Failed to fetch doctors');
     }
   }
 
+  ///  Get doctors filtered by department ID (Token Required)
+  Future<List<Doctor>> getDoctorsByDepartment(int deptId) async {
+    String? token = await _authService.getToken();
 
-
-
-
-  /// ✅ Get doctors filtered by department ID
-
-
-
-    Future<List<Doctor>> getDoctorsByDepartment(int deptId) async {
-      final url = Uri.parse("$baseUrl/api/doctor/by-department/$deptId"); // include /api
-      final response = await http.get(url); // no token needed for visitors
-
-      if (response.statusCode == 200) {
-        List jsonList = json.decode(response.body);
-        return jsonList.map((e) => Doctor.fromJson(e)).toList();
-      } else {
-        throw Exception(
-            "Failed to load doctors: ${response.statusCode} - ${response.body}");
-      }
+    if (token == null) {
+      print('No Token Found, Please login first.');
+      return [];
     }
 
+    final url = Uri.parse("$baseUrl/api/doctor/by-department/$deptId");
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
 
-
-
-
-
-
-/// ✅ Visitor-friendly: Get doctors by department WITHOUT token
-Future<List<Doctor>> getDoctorsByDepartmentWithoutToken(int departmentId) async {
-  final url = Uri.parse("baseUrl/api/doctor/by-department/$departmentId");
-
-  final response = await http.get(url); // Token নেই, সোজা GET
-
-  if (response.statusCode == 200) {
-    List jsonList = json.decode(response.body);
-    return jsonList.map((e) => Doctor.fromJson(e)).toList();
-  } else {
-    throw Exception(
-        "Failed to load doctors: ${response.statusCode} - ${response.body}");
+    if (response.statusCode == 200) {
+      List jsonList = json.decode(response.body);
+      return jsonList.map((e) => Doctor.fromJson(e)).toList();
+    } else {
+      print('Failed to load doctors: ${response.statusCode} - ${response.body}');
+      throw Exception("Failed to load doctors");
+    }
   }
-}
 
+  /// Visitor-friendly: public endpoint (no token)
+  Future<List<Doctor>> getDoctorsByDepartmentWithoutToken(int departmentId) async {
+    final url = Uri.parse("$baseUrl/api/doctor/by-department/$departmentId");
 
+    final response = await http.get(url);
 
+    if (response.statusCode == 200) {
+      List jsonList = json.decode(response.body);
+      return jsonList.map((e) => Doctor.fromJson(e)).toList();
+    } else {
+      throw Exception("Failed to load doctors: ${response.statusCode} - ${response.body}");
+    }
+  }
 
 
 

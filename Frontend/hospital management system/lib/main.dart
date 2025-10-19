@@ -29,11 +29,11 @@ class MyApp extends StatelessWidget {
 
       // Routing map
       routes: {
-        '/login': (context) => LoginPage(),                 // Login page
-        '/appointment': (context) => const AppointmentPageWidget(), // Appointment page
-        '/register': (context) => const Registration(), // Registration page
-        '/departments': (context) => const DepartmentDoctorPage(), // DepartmentPage
-        '/doctors': (context) => const DoctorPage(), // Doctor Page profile
+        '/login': (context) => LoginPage(),
+        '/appointment': (context) => const AppointmentPageWidget(),
+        '/register': (context) => const Registration(),
+        '/departments': (context) => const DepartmentDoctorPage(),
+        '/doctors': (context) => const DoctorPage(),
         '/contact': (context) => const ContactPage(),
         '/facility': (context) => const FacilityPage(),
 

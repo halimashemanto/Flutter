@@ -7,25 +7,25 @@ import 'package:http/http.dart' as http;
 class DepartmentService {
   final String baseUrl = "http://localhost:8080/api";
 
-  final AuthService _authService = AuthService();
+  // final AuthService _authService = AuthService();
 
   Future<List<Department>> getDepartments() async {
     try {
       // 🔹 Get saved token
-      String? token = await _authService.getToken();
-
-      if (token == null) {
-        print("No Token Found. Please login first.");
-        return [];
-      }
+      // String? token = await _authService.getToken();
+      //
+      // if (token == null) {
+      //   print("No Token Found. Please login first.");
+      //   return [];
+      // }
 
       // 🔹 Send authorized request
       final response = await http.get(
         Uri.parse("$baseUrl/department/"),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+        // headers: {
+        //   'Authorization': 'Bearer $token',
+        //   'Content-Type': 'application/json',
+        // },
       );
 
       if (response.statusCode == 200) {

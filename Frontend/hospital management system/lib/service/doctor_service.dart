@@ -49,19 +49,19 @@ class DoctorService {
 
   // All doctors
   Future<List<Doctor>> getAllDoctors() async {
-    String? token = await _authService.getToken();
-
-    if (token == null) {
-      print('No Token Found, Please login first.');
-      return [];
-    }
+    // String? token = await _authService.getToken();
+    //
+    // if (token == null) {
+    //   print('No Token Found, Please login first.');
+    //   return [];
+    // }
 
     final response = await http.get(
       Uri.parse("$baseUrl/api/doctor/"),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
+      // headers: {
+      //   'Authorization': 'Bearer $token',
+      //   'Content-Type': 'application/json',
+      // },
     );
 
     if (response.statusCode == 200) {
@@ -104,20 +104,20 @@ class DoctorService {
 
   ///  Get doctors filtered by department ID (Token Required)
   Future<List<Doctor>> getDoctorsByDepartment(int deptId) async {
-    String? token = await _authService.getToken();
-
-    if (token == null) {
-      print('No Token Found, Please login first.');
-      return [];
-    }
+    // String? token = await _authService.getToken();
+    //
+    // if (token == null) {
+    //   print('No Token Found, Please login first.');
+    //   return [];
+    // }
 
     final url = Uri.parse("$baseUrl/api/doctor/by-department/$deptId");
     final response = await http.get(
       url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
+      // headers: {
+      //   'Authorization': 'Bearer $token',
+      //   'Content-Type': 'application/json',
+      // },
     );
 
     if (response.statusCode == 200) {
